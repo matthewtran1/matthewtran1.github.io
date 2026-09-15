@@ -11,5 +11,29 @@
   <body>
     <div id="root"></div>
     
+    <script>
+    window.addEventListener('load', function() {
+      const sections = ['home', 'about', 'projects', 'contact'];
+      const seen = new Set();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !seen.has(entry.target.id)) {
+            seen.add(entry.target.id);
+            window.goatcounter.count({
+              path: `viewed-${entry.target.id}`,
+              title: `Viewed section: ${entry.target.id}`,
+              event: true,
+            });
+          }
+        });
+      }, { threshold: 0.5 });
+
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    });
+  </script>
   </body>
 </html>
